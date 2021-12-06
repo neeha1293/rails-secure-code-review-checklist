@@ -22,43 +22,47 @@ Note: This is not a comprehensive list and using Brakeman is still recommended t
 - Secrets
 - Serialization
 - Mass Assignment
+- Insecure Gems
 
 ## SQL Injection
 
-Rails comes with many clever methods that are immune to SQL injection. However there are instances where SQL injection is still possible. 
+Rails comes with clever methods that are immune to SQL injection. Ruby on Rails provides an interface called Active Record, an object-relational mapping (ORM) abstraction that facilitates database access. AR sanitizes data passed to certain methods. Passing arrays and hashes to methods also is safe from injection. Below  are instances where data is not sanitized by these methods:
 
 Grep for the following and then review:
 
 ```ruby 
 .find_by(
+.where
+.from(
 .delete_all(
 .delete_by(
 .destroy_by(
 .update_all(
-.where
-.from(
 .group(
 .exists(
 .select(
 .joins(
+.calculate(
 ```
 
 Unsafe code:
 
 ```ruby
 Project.where("name = '#{params[:name]}'")
-User.find(params[:name])
+Order.joins(params[:table])
+User.find_by params[:id]
+
 ```
 
 Safe code:
 
 ```ruby
 User.where({ name: params[:name] })
+User.where(name: params[:name])
 User.find_by(name: params[:name])
 User.find_by_something(something)
-User.find(id)
+User.find(something)
 User.where(["name = ?", "#{params[:name]}"])
-Model.where(login: entered_user_name, password: entered_password)
 .santize_sql()
 ```
 
@@ -68,7 +72,19 @@ As shown in the safe code snippets above, the following measures can be used:
 - use parameterized queries (?)
 - use methods that apply SQL sanitization by default, such as find_by_something
 - use array or hashes in model instances. 
-- use sanitize_sql() method when default sql sanitization is not performed by the methods
+- use sanitize_sql() method where sanitization is not performed by default
+
+References and further reading: 
+- https://guides.rubyonrails.org/security.html
+- https://rails-sqli.org/
+- https://www.netsparker.com/blog/web-security/sql-injection-ruby-on-rails-development/
+- https://www.stackhawk.com/blog/sql-injection-prevention-rails/
+- https://knowledge-base.secureflag.com/vulnerabilities/sql_injection/sql_injection_ruby.html
+
+
+## Command Injection
+
+
 
 
 
