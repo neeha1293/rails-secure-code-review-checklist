@@ -66,7 +66,7 @@ User.where(["name = ?", "#{params[:name]}"])
 .santize_sql()
 ```
 
-Countermeasures
+Prevention
 
 As shown in the safe code snippets above, the following measures can be used:
 - use parameterized queries (?)
@@ -84,12 +84,50 @@ References and further reading:
 
 ## Command Injection
 
+Grep for the following and then review:
 
+```ruby
+exec(
+system(
+syscall(
+eval(
+constantize(
+render(
+FileList
+....
+`.*`  // backticks
+ImageMagick
+%x(
+%x[
+Open3.capture2(".*")
+Open3.capture2e(".*")
+Open3.capture3(".*")
+Rails.logger.debug("Running:
+```
 
+Unsafe code:
 
+```ruby
+system(mkdir "#{params[:project_name]}")
+system("cat", user_supplied_path) // fix: use file.read 
+Open3.capture2e("ls #{params[:project_name]}")
+```
 
+Safe code:
 
+```ruby
+system("mkdir","params[:project_name]")
+Open3.capture2e("ls", path)
+Open3.popen3([cmdname, argv0], arg1, ...)
+```
 
+Prevention:
+
+- Use parameterized methods
+- Sanitize input / use an allowlist
+- use Ruby's file handling modules such as FileUtils
+- Use native API methods like IO.capture2 or Open3.popen, that ingest arguments as a list
+- For constantize and render methods, add an allow list of params in their method definitions
 
 
 
