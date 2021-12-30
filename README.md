@@ -129,7 +129,11 @@ Prevention:
 - Use native API methods like IO.capture2 or Open3.popen, that ingest arguments as a list
 - For constantize and render methods, add an allow list of params in their method definitions
 
-
+References and further reading:
+- https://www.stackhawk.com/blog/command-injection-ruby/
+- http://gavinmiller.io/2015/fixing-command-injection-vulnerabilities/
+- https://knowledge-base.secureflag.com/vulnerabilities/code_injection/os_command_injection_ruby.html
+- https://docs.guardrails.io/docs/en/vulnerabilities/ruby/insecure_use_of_dangerous_function
 
 
 
