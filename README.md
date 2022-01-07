@@ -135,6 +135,24 @@ References and further reading:
 - https://knowledge-base.secureflag.com/vulnerabilities/code_injection/os_command_injection_ruby.html
 - https://docs.guardrails.io/docs/en/vulnerabilities/ruby/insecure_use_of_dangerous_function
 
+## Cross-site Scripting
+
+
+
+
+## Sessions, cookies and authentication
+
+Best practices: 
+
+- Use authentication gems like Devise, AuthLogic or Clearance
+- Check password strength - use Devise's ```ruby validate :password_strength```
+- use MFA gems like authy-devise
+- use @current_user to fetch data instead of Model.find_by(userid)
+ 
+## Authorization
+
+- use a gem like CanCanCan
+- add 
 
 
 
