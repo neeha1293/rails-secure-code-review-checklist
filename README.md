@@ -178,9 +178,11 @@ Whitelist:
 
 Unsafe
 
-• #match to add routes in routes.rb is bad, because match will match for all VERBS. This is bad since CSRF protection is not available for GET in ruby. So use #get, #post, etc
-• Using GET for important actions is bad
-- ```ruby protect_from_forgery except``` is bad
+-  #match to add routes in routes.rb is bad, because match will match for all VERBS. This is bad since CSRF protection is not available for GET in ruby. So use #get, #post, etc
+-  Using GET for important actions is bad
+``` ruby
+protect_from_forgery except
+```
 
 Best practices:
 
@@ -190,7 +192,9 @@ Best practices:
   - The handle_unverified_request method only invalidates session but not cookies and the devs have used their own cookies instead of session helpers
 	 - The request takes values from user input instead of session 
 
-- ```ruby verify :method => :post, :only => [:transfer], :redirect_to => {:action => :list}```
+```ruby 
+verify :method => :post, :only => [:transfer], :redirect_to => {:action => :list}
+```
 
 ## Deserialization 
 
@@ -231,7 +235,10 @@ Best practices:
 Best practices: 
 
 - use a gem like CanCanCan
-- add ```ruby  before_action :authorize_user```
+- add
+  ```ruby
+  before_action :authorize_user
+  ```
 - For Pundit, add this to check if authorize has been added to every controller
   
 ```ruby
@@ -244,7 +251,10 @@ End
 ## Crypto
 
 Best practices: 
-```ruby config.force_ssl = true```
+
+```ruby 
+config.force_ssl = true
+```
 
 Keys should be stored within a cryptographic vault 
 All key operations should be performed within this vault.
@@ -252,10 +262,17 @@ All key operations should be performed within this vault.
 ## Redirects
 
 Grep for unsafe code to review:
-```ruby Redirect_to```
-catch all routes like ```ruby "match ':```
+
+```ruby 
+Redirect_to
+```
+catch all routes like 
+```ruby
+"match ':
+```
 
 Best practices:
+
 ```ruby
 Only_path: true
 URI.parse(params[dest]).path
@@ -276,7 +293,8 @@ Best practice:
 
 Ssrf gem
 
-```ruby require 'ssrf_filter'
+```ruby
+require 'ssrf_filter'
 SsrfFilter.get(params[:url])
 ```
 
@@ -285,19 +303,25 @@ SsrfFilter.get(params[:url])
 
 Best practices: 
 
-```ruby @user = current_user```
+```ruby 
+@user = current_user
+```
 
 ## CORS
 
 Best practices:
 
-```ruby Rack::cors``` (gem)
+```ruby 
+Rack::cors
+```
 
 ## Logging
 
 Best practice:
 
-```ruby config.filter_parameters```
+```ruby 
+config.filter_parameters
+```
 
 ## File upload/download
 
@@ -332,11 +356,22 @@ Attr_protected
 
 Best practices:
 
-- ```ruby config.active_record.whitelist_attributes = true``` (in config/application.rb)
-- ```ruby Attr_accessible``` (whitelist)
+```ruby 
+config.active_record.whitelist_attributes = true
+```
+(in config/application.rb)
+```ruby
+Attr_accessible
+```
+(whitelist)
 - use strong parameter gem
-- set ```ruby config.active_record.whitelist_attributes``` to ```ruby true```
-- Set ```ruby config.active_record.mass_assignment_sanitize``` to ```ruby :strict```
+```ruby
+config.active_record.whitelist_attributes
+```
+set to :strict
+```ruby 
+config.active_record.mass_assignment_sanitize
+```
 This will throw an error for every mass assignment because our whitelist is empty. From the errors, we can review each attr and build our whitelist
 
 
