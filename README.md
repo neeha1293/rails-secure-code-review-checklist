@@ -183,6 +183,7 @@ Unsafe
 ``` ruby
 protect_from_forgery except
 ```
+is bad
 
 Best practices:
 
